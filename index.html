@@ -1,8 +1,282 @@
-<link rel="manifest" href="manifest.json" />
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('SW registered'))
-      .catch(err => console.error('SW registration failed', err));
-  }
-</script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>千明の Daily Code 日記</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA設定 -->
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('SW registered'))
+        .catch(err => console.error('SW registration failed', err));
+    }
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+  <div class="max-w-3xl mx-auto p-4 sm:p-6">
+    <!-- ヘッダー -->
+    <header class="mb-4">
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
+        千明の Daily Code 日記
+      </h1>
+      <p class="text-sm text-slate-500 mt-1">
+        美しさ・他者貢献・成長・探求に沿って、1日を振り返るための専用ノート
+      </p>
+    </header>
+
+    <!-- 日付選択と保存ボタン -->
+    <section class="mb-4 flex flex-col sm:flex-row sm:items-end gap-3">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          日付
+        </label>
+        <input
+          id="dateInput"
+          type="date"
+          class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white"
+        />
+      </div>
+      <div class="flex-1 flex items-center gap-2">
+        <button
+          id="saveButton"
+          class="mt-1 inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold bg-sky-500 text-white hover:bg-sky-600 transition shadow-sm"
+        >
+          保存する
+        </button>
+        <span id="saveStatus" class="text-xs text-slate-500 mt-1">
+          未保存
+        </span>
+      </div>
+    </section>
+
+    <!-- 価値観チェック -->
+    <section class="mb-4">
+      <h2 class="text-sm font-semibold text-slate-700 mb-2">
+        今日、どの価値観に沿って生きられた？
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <label class="flex items-center gap-2 text-sm bg-white rounded-xl px-3 py-2 shadow-sm">
+          <input id="valueBeauty" type="checkbox" class="w-4 h-4" />
+          <span>美しさ</span>
+        </label>
+        <label class="flex items-center gap-2 text-sm bg-white rounded-xl px-3 py-2 shadow-sm">
+          <input id="valueContribution" type="checkbox" class="w-4 h-4" />
+          <span>他者貢献</span>
+        </label>
+        <label class="flex items-center gap-2 text-sm bg-white rounded-xl px-3 py-2 shadow-sm">
+          <input id="valueGrowth" type="checkbox" class="w-4 h-4" />
+          <span>成長</span>
+        </label>
+        <label class="flex items-center gap-2 text-sm bg-white rounded-xl px-3 py-2 shadow-sm">
+          <input id="valueInquiry" type="checkbox" class="w-4 h-4" />
+          <span>探求</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- 記入エリア -->
+    <section class="space-y-4 mb-6">
+
+      <!-- Morning -->
+      <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-semibold text-slate-800">Morning｜朝</h2>
+          <span class="text-xs text-sky-500">今日の変化 & 探求テーマをセット</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">
+          ・今日どんな「変化」を見つけたい？<br>
+          ・今日の「探求テーマ」は何？
+        </p>
+        <textarea
+          id="morningText"
+          rows="3"
+          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
+          placeholder="例）&#10;・クライアントの歩行の変化を丁寧に観察する&#10;・Biniの空間認知と重心の関係を1つ検証してみる"
+        ></textarea>
+      </div>
+
+      <!-- Day -->
+      <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-semibold text-slate-800">Day｜日中</h2>
+          <span class="text-xs text-sky-500">他者貢献 & 気づき & つながった理解</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">
+          ・今日は誰の「人生を少し動かせた」？<br>
+          ・どんな知識と知識がつながった？
+        </p>
+        <textarea
+          id="dayText"
+          rows="4"
+          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
+          placeholder="例）&#10;・○○さんの立ち上がりで、股関節の準備動作と不安感がリンクしている気づき&#10;・自己組織化理論のこの部分と、Biniのこの視点がつながった…"
+        ></textarea>
+      </div>
+
+      <!-- Evening -->
+      <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-semibold text-slate-800">Evening｜夜</h2>
+          <span class="text-xs text-sky-500">今日の変化3つ & 明日の優しい約束</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">
+          ・今日見つけた「変化」を3つ書く<br>
+          ・明日の自分にしてあげたい、優しい約束は？
+        </p>
+        <textarea
+          id="eveningText"
+          rows="4"
+          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
+          placeholder="例）&#10;【今日の変化】&#10;1. &#10;2. &#10;3. &#10;&#10;【明日のやさしい約束】&#10;・5分だけ静かな時間をとる&#10;・自然の中を少し歩く"
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- 最近の記録 -->
+    <section class="mb-8">
+      <h2 class="text-sm font-semibold text-slate-700 mb-2">
+        最近の記録（直近7日）
+      </h2>
+      <ul id="recentList" class="space-y-1 text-xs text-slate-600"></ul>
+    </section>
+
+    <footer class="text-[11px] text-slate-400 text-center mb-4">
+      このツールは、千明さんの「幸福の地図」と Daily Code を日常に落とし込むための個人用ノートです。
+    </footer>
+  </div>
+
+  <!-- main script -->
+  <script>
+    const dateInput = document.getElementById("dateInput");
+    const morningText = document.getElementById("morningText");
+    const dayText = document.getElementById("dayText");
+    const eveningText = document.getElementById("eveningText");
+    const valueBeauty = document.getElementById("valueBeauty");
+    const valueContribution = document.getElementById("valueContribution");
+    const valueGrowth = document.getElementById("valueGrowth");
+    const valueInquiry = document.getElementById("valueInquiry");
+    const saveButton = document.getElementById("saveButton");
+    const saveStatus = document.getElementById("saveStatus");
+    const recentList = document.getElementById("recentList");
+
+    function getTodayStr() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function storageKey(dateStr) {
+      return `chiaki-dailycode-${dateStr}`;
+    }
+
+    function loadEntry(dateStr) {
+      const raw = localStorage.getItem(storageKey(dateStr));
+      if (!raw) {
+        morningText.value = "";
+        dayText.value = "";
+        eveningText.value = "";
+        valueBeauty.checked = false;
+        valueContribution.checked = false;
+        valueGrowth.checked = false;
+        valueInquiry.checked = false;
+        saveStatus.textContent = "未保存";
+        return;
+      }
+      try {
+        const data = JSON.parse(raw);
+        morningText.value = data.morningText || "";
+        dayText.value = data.dayText || "";
+        eveningText.value = data.eveningText || "";
+        valueBeauty.checked = !!data.values?.beauty;
+        valueContribution.checked = !!data.values?.contribution;
+        valueGrowth.checked = !!data.values?.growth;
+        valueInquiry.checked = !!data.values?.inquiry;
+        saveStatus.textContent = "読み込み済み";
+      } catch (e) {
+        console.error("Failed to parse entry", e);
+        saveStatus.textContent = "読み込みエラー";
+      }
+    }
+
+    function saveEntry() {
+      const dateStr = dateInput.value;
+      if (!dateStr) return;
+      const data = {
+        date: dateStr,
+        morningText: morningText.value,
+        dayText: dayText.value,
+        eveningText: eveningText.value,
+        values: {
+          beauty: valueBeauty.checked,
+          contribution: valueContribution.checked,
+          growth: valueGrowth.checked,
+          inquiry: valueInquiry.checked,
+        },
+        updatedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(storageKey(dateStr), JSON.stringify(data));
+      saveStatus.textContent = "保存しました";
+      updateRecentList();
+      setTimeout(() => {
+        saveStatus.textContent = "保存済み";
+      }, 1000);
+    }
+
+    function updateRecentList() {
+      recentList.innerHTML = "";
+      const entries = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("chiaki-dailycode-")) {
+          const dateStr = key.replace("chiaki-dailycode-", "");
+          try {
+            const data = JSON.parse(localStorage.getItem(key));
+            entries.push({ date: dateStr, updatedAt: data.updatedAt || "" });
+          } catch {}
+        }
+      }
+
+      entries.sort((a, b) => (a.date < b.date ? 1 : -1));
+      const recent = entries.slice(0, 7);
+
+      for (const item of recent) {
+        const li = document.createElement("li");
+        li.className =
+          "flex items-center justify-between bg-white rounded-lg px-3 py-2 shadow-sm cursor-pointer hover:bg-slate-50";
+        li.innerHTML = `
+          <span>${item.date}</span>
+          <span class="text-[10px] text-slate-400">タップで読み込み</span>
+        `;
+        li.addEventListener("click", () => {
+          dateInput.value = item.date;
+          loadEntry(item.date);
+        });
+        recentList.appendChild(li);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = getTodayStr();
+      dateInput.value = today;
+      loadEntry(today);
+      updateRecentList();
+    });
+
+    dateInput.addEventListener("change", () => {
+      loadEntry(dateInput.value);
+    });
+
+    saveButton.addEventListener("click", saveEntry);
+  </script>
+
+</body>
+</html>
