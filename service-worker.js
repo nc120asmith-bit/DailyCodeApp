@@ -33,4 +33,15 @@ setInterval(() => {
       icon: "icon-192.png"
     });
   }
-}, 60000);
+}, 60000);<script>
+document.getElementById("requestNotification")
+  .addEventListener("click", async () => {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      alert("通知が有効になりました！");
+    } else {
+      alert("通知が許可されませんでした。");
+    }
+});
+</script>
+
